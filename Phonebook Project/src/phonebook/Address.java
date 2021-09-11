@@ -2,47 +2,47 @@ package phonebook;
 
 public class Address {
 	
-	private int number;
-	private String street;
-	private String suffix;
+	private int streetNumber;
+	private String streetName;
+	private String streetSuffix;
 	private String city;
 	private String state;
 	private int zip;
 	
 	public Address() {};
 	
-	public Address(int number, String street, String suffix, String city, String state, int zip) {
+	public Address(int streetNumber, String streetName, String streetSuffix, String city, String state, int zip) {
 		super();
-		this.number = number;
-		this.street = street;
-		this.suffix = suffix;
+		this.streetNumber = streetNumber;
+		this.streetName = streetName;
+		this.streetSuffix = streetSuffix;
 		this.city = city;
 		this.state = state;
 		this.zip = zip;
 	}
 
-	public int getNumber() {
-		return number;
+	public int getStreetNumber() {
+		return streetNumber;
 	}
 
-	public void setNumber(int number) {
-		this.number = number;
+	public void setStreetNumber(int streetNumber) {
+		this.streetNumber = streetNumber;
 	}
 
-	public String getStreet() {
-		return street;
+	public String getStreetName() {
+		return streetName;
 	}
 
-	public void setStreet(String street) {
-		this.street = street;
+	public void setStreetName(String streetName) {
+		this.streetName = streetName;
 	}
 
-	public String getSuffix() {
-		return suffix;
+	public String getStreetSuffix() {
+		return streetSuffix;
 	}
 
-	public void setSuffix(String suffix) {
-		this.suffix = suffix;
+	public void setStreetSuffix(String streetSuffix) {
+		this.streetSuffix = streetSuffix;
 	}
 
 	public String getCity() {
@@ -69,8 +69,12 @@ public class Address {
 		this.zip = zip;
 	}
 	
+	public String getStreetAddress() {
+		return streetNumber + " " + streetName + " " + streetSuffix;
+	}
+	
 	public String getFullAddress() {
-		return number + " " + street + " " + suffix + "\n" + city + ", " + state + " " + zip;
+		return streetNumber + " " + streetName + " " + streetSuffix + "\n" + city + ", " + state + " " + zip;
 	}
 	
 }
