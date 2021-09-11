@@ -43,14 +43,17 @@ public class Person extends Address {
 	}
 	
 	public String getFullName() {
+		String fullName;
 		if (middleName == null || middleName == "") {
-			middleName = "NMI";
+			fullName = firstName + " " + lastName;
+		} else {
+			fullName = firstName + " " + middleName + " " + lastName;
 		}
-		return firstName + " " + middleName + " " + lastName;
+		return fullName;
 	}
 
-	public long getPhoneNumber() {
-		return phoneNumber;
+	public String getPhoneNumber() {
+		return String.valueOf(phoneNumber).replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
 	}
 
 	public void setPhoneNumber(long phoneNumber) {

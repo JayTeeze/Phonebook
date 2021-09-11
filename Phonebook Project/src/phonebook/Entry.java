@@ -3,60 +3,61 @@ package phonebook;
 // Entry class acts as database, resets at end of program 
 public class Entry {
 	
-	private Person[] arr = new Person[3];
+	private Person[] arr = new Person[0];
 	
 	public Entry() {};
 	
 	// getter for entries
-	public Person[] getCurrent() {
-		return arr;
+	public void getCurrentEntries() {
+		for (int i = 0; i < arr.length; i++) {
+			System.out.println("Entry #" + (i + 1) + ":\n" + arr[i].getFullEntry() + "\n");
+		}
+		if (arr.length == 0) {
+			System.out.println("No records on file.");
+		}
 	}
 	
-	// pre-populates Person array at start of program
-	public void prePopulate() {
-		this.arr[0] = new Person("John", null, "Doe", 114, "Market", "St", "St Louis", "MO", 63403, 6366435698L);
-		this.arr[1] = new Person("John", "E", "Doe", 324, "Main", "St", "St Charles", "MO", 63303, 8475390126L);
-		this.arr[2] = new Person("John", "Michael", "West Doe", 574, "Pole", "Ave", "St Peters", "MO", 63333, 5628592375L);
-	}
-	
-	public void create(String userInput) {
-		if (userInput == null || userInput.isEmpty()) {
-			userInput = "0";
+	// Adds user input as an entry
+	public void addEntry(String userInput) {
+		String firstName = "", middleName = null, lastName = "", addressName = "", streetSuffix = "", city = "", state = "";
+		int addressNumber = 0, zipCode = 0;
+		long phoneNum = 0;
+		
+		String[] input = userInput.trim().split(",");
+		String[] fullName = input[0].trim().split(" ");
+		String[] streetAddress = input[1].trim().split(" ");
+		
+		// Checks whether name input is "First Last" or "First Middle Last" and assigns to name fields
+		if (fullName.length == 2) {
+			firstName = fullName[0];
+			lastName = fullName[1];
+		} else if (fullName.length == 3) {
+			firstName = fullName[0];
+			middleName = fullName[1];
+			lastName = fullName[2];
+		} else if (fullName.length == 4) {
+			firstName = fullName[0];
+			middleName = fullName[1];
+			lastName = fullName[2] + " " + fullName[3];
 		}
 		
-		char[] characters = userInput.toCharArray();
-		String[] input = new String[1];
-		String[] temp;
-		int endOfLine = characters.length - 1;
-		String word = "";
-		int wordCount = 0;
-		boolean isWord = false;
+		// Assigns to address fields
+		addressNumber = Integer.parseInt(streetAddress[0]);
+		addressName = streetAddress[1];
+		streetSuffix = streetAddress[2];
+		city = input[2].trim();
+		state = input[3].trim();
+		zipCode = Integer.parseInt(input[4].trim());
 		
-		for (int i = 0; i < characters.length; i++) {
-			if (Character.isLetter(characters[i]) && i != endOfLine) {
-				word += characters[i];
-				isWord = true;
-			} else if (!Character.isLetter(characters[i])  && isWord) {
-				input[wordCount] = word;
-				temp = new String[input.length + 1];
-				temp[wordCount] = input[wordCount];
-				input = temp;
-				wordCount++;
-				word = "";
-				isWord = false;
-			} else if (Character.isLetter(characters[i]) && i == endOfLine) {
-				
-			}
-		}
-		System.out.println(input.length);
-		System.out.println(input[0]);
+		// Assigns phone number
+		phoneNum = Long.parseLong(input[5].trim());
 		
-		//Person newPerson = new Person(firstName, middleName, lastName, addressNumber, addressName, streetSuffix, city, state, zipCode, phoneNum);
-		//return newPerson;
+		Person newPerson = new Person(firstName, middleName, lastName, addressNumber, addressName, streetSuffix, city, state, zipCode, phoneNum);
+		increaseEntrySize(newPerson);
 	}
 	
-	// method to increase length of array and sets null values to last object in array
-	public void add(Person newPerson) {
+	// method paired with 'addEntry' to increase length of array and sets null values to last object in array
+	private void increaseEntrySize(Person newPerson) {
 		Person[] tempArr = new Person[arr.length + 1];
 		
 		for (int i = 0; i < arr.length; i++) {
@@ -64,6 +65,10 @@ public class Entry {
 		}
 		arr = tempArr;
 		arr[arr.length - 1] = newPerson;
+	}
+	
+	private void updateEntry() {
+		
 	}
 
 }

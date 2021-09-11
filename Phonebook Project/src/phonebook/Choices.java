@@ -3,7 +3,7 @@ package phonebook;
 public class Choices {
 	
 	public static void mainMenu() {
-		System.out.println("What would you like to do today?\n");
+		System.out.println("\nWhat would you like to do today?\n");
 		System.out.println("To add a new record, press 1");
 		System.out.println("To view an existing record, press 2");
 		System.out.println("To update an existing record, press 3");
