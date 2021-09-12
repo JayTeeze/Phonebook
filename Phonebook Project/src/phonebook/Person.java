@@ -1,6 +1,6 @@
 package phonebook;
 
-public class Person extends Address {
+public class Person extends Address implements Comparable <Person> {
 	
 	private String firstName;
 	private String middleName;
@@ -62,6 +62,11 @@ public class Person extends Address {
 	
 	public String getFullEntry() {
 		return getFullName() + "\n" + getFullAddress() + "\n" + getPhoneNumber();
+	}
+
+	@Override
+	public int compareTo(Person o) {
+		return getFullName().compareTo(o.getFullName());
 	}
 	
 	

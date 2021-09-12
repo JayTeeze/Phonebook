@@ -27,15 +27,14 @@ public class Choices {
 	
 	public static void exitChoices() {
 		System.out.println("To return to Main Menu, enter 1");
-		System.out.println("To exit program, press 2");
+		System.out.println("To exit program, enter 2");
 		System.out.print("Enter choice here: ");
 	}
 	
-	// not in use
-	public static void deleteRecord() {
-		System.out.println("To add a new record, press 1");
-		System.out.println("To update an existing record, press 2");
-		System.out.println("To delete an existing record, press 3");
+	public static void yesOrNo() {
+		System.out.println("YES, enter 1");
+		System.out.println("NO, enter 2");
+		System.out.print("Enter choice here: ");
 	}
 
 }
