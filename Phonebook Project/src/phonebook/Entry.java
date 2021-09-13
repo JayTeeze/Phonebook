@@ -42,8 +42,6 @@ public class Entry {
 					case 2:
 						choice = 2;
 						break;
-					default:
-						choice = 2;
 					}
 					exit = true;
 				} else {
@@ -103,6 +101,185 @@ public class Entry {
 		arr[arr.length - 1] = newPerson;
 	}
 	
+	// Searches for existing entries using user selected search criteria
+	public void searchEntries(int entry) {
+		int[] searchResultChoice = new int[0];
+		int counter = 0;
+		
+		switch (entry) {
+		case 1:
+			System.out.print("\nEnter FIRST NAME: ");
+			String searchInput = MainMenu.in.nextLine().trim();
+			System.out.println();
+			
+			for (int i = 0; i < arr.length; i++) {
+				if (searchInput.equalsIgnoreCase(arr[i].getFirstName())) {
+					System.out.println("Entry #" + (counter + 1) + ":\n" + arr[i].getFullEntry());
+					// Getting index number in Person[] arr for any matching results
+					int[] tempArr = new int[searchResultChoice.length + 1];
+					tempArr[counter] = i;
+					searchResultChoice = tempArr;
+					counter++;
+				}
+			}
+			break;
+		case 2:
+			System.out.print("\nEnter LAST NAME: ");
+			searchInput = MainMenu.in.nextLine().trim();
+			System.out.println();
+			
+			for (int i = 0; i < arr.length; i++) {
+				if (searchInput.equalsIgnoreCase(arr[i].getLastName())) {
+					System.out.println("Entry #" + (counter + 1) + ":\n" + arr[i].getFullEntry());
+					// Getting index number in Person[] arr for any matching results
+					int[] tempArr = new int[searchResultChoice.length + 1];
+					tempArr[counter] = i;
+					searchResultChoice = tempArr;
+					counter++;
+				}
+			}
+			break;
+		case 3:
+			System.out.print("\nEnter FULL NAME: ");
+			searchInput = MainMenu.in.nextLine().trim();
+			System.out.println();
+			
+			for (int i = 0; i < arr.length; i++) {
+				if (searchInput.equalsIgnoreCase(arr[i].getFullName())) {
+					System.out.println("Entry #" + (counter + 1) + ":\n" + arr[i].getFullEntry());
+					// Getting index number in Person[] arr for any matching results
+					int[] tempArr = new int[searchResultChoice.length + 1];
+					tempArr[counter] = i;
+					searchResultChoice = tempArr;
+					counter++;
+				}
+			}
+			break;
+		case 4:
+			System.out.print("\nEnter TELEPHONE NUMBER: ");
+			searchInput = MainMenu.in.nextLine().trim().replaceAll("[^0-9]", "");
+			System.out.println();
+			
+			if(searchInput.matches("\\d")) {
+				long phoneNumber = Long.parseLong(searchInput);
+				
+				for (int i = 0; i < arr.length; i++) {
+					if (phoneNumber == arr[i].getPhoneNumber()) {
+						System.out.println("Entry #" + (counter + 1) + ":\n" + arr[i].getFullEntry());
+						// Getting index number in Person[] arr for any matching results
+						int[] tempArr = new int[searchResultChoice.length + 1];
+						tempArr[counter] = i;
+						searchResultChoice = tempArr;
+						counter++;
+					}
+				}
+			}
+			break;
+		case 5:
+			System.out.print("\nEnter CITY: ");
+			searchInput = MainMenu.in.nextLine().trim();
+			System.out.println();
+			
+			for (int i = 0; i < arr.length; i++) {
+				if (searchInput.equalsIgnoreCase(arr[i].getCity())) {
+					System.out.println("Entry #" + (counter + 1) + ":\n" + arr[i].getFullEntry());
+					// Getting index number in Person[] arr for any matching results
+					int[] tempArr = new int[searchResultChoice.length + 1];
+					tempArr[counter] = i;
+					searchResultChoice = tempArr;
+					counter++;
+				}
+			}
+			break;
+		case 6:
+			System.out.print("\nEnter STATE: ");
+			searchInput = MainMenu.in.nextLine().trim();
+			System.out.println();
+			
+			for (int i = 0; i < arr.length; i++) {
+				if (searchInput.equalsIgnoreCase(arr[i].getState())) {
+					System.out.println("Entry #" + (counter + 1) + ":\n" + arr[i].getFullEntry());
+					// Getting index number in Person[] arr for any matching results
+					int[] tempArr = new int[searchResultChoice.length + 1];
+					tempArr[counter] = i;
+					searchResultChoice = tempArr;
+					counter++;
+				}
+			}
+			break;
+		}
+		// If results come back, execute code below
+		if (counter > 0) {
+			subSearchEntries(searchResultChoice, counter);
+		} else {
+			System.out.println("No entries matched criteria.");
+		}
+		
+	}
+	
+	// Sub-method for searchEntries() that when together hold index of Person in Person[] arr for further functionality
+	private void subSearchEntries(int[] searchResultChoice, int counter) {
+		boolean exit = false;
+		Choices.searchEntriesSubMenu();
+		do {
+			try {
+				int choice = Integer.parseInt(MainMenu.in.nextLine());
+				if (choice >= 1 && choice <= 3) {
+					switch (choice) {
+					case 1:
+					// Updates a record from search results and prompts user to select entry to update
+						System.out.print("\nPlease select entry: ");
+						do {
+							try {
+								choice = Integer.parseInt(MainMenu.in.nextLine());
+								if (choice > 0 && choice <= counter + 1) {
+									// Passes index from search result entry to updateEntry()
+									updateEntry(searchResultChoice[choice - 1]);
+									exit = true;
+								} else {
+									System.out.print("Please enter a valid option: ");
+								}
+							} catch (NumberFormatException e) {
+								System.out.print("Please enter a valid option: ");
+							}
+						} while (exit == false);
+						exit = false;
+						break;
+					case 2:
+					// Deletes a record from the search results
+						System.out.print("\nPlease select entry: ");
+						do {
+							try {
+								choice = Integer.parseInt(MainMenu.in.nextLine());
+								if (choice > 0 && choice <= counter + 1) {
+									// Passes index from search result entry to updateEntry()
+									deleteEntry(searchResultChoice[choice - 1]);
+									exit = true;
+								} else {
+									System.out.print("Please enter a valid option: ");
+								}
+							} catch (NumberFormatException e) {
+								System.out.print("Please enter a valid option: ");
+							}
+						} while (exit == false);
+						exit = false;
+						break;
+					// Ends loop and returns user to Main Menu
+					case 3:
+						break;
+					default:
+						System.out.println("Invalid input. Redirecting to Main Menu");
+					}
+					exit = true;
+				} else {
+					System.out.print("Please enter a valid option: ");
+				}
+			} catch (NumberFormatException e) {
+				System.out.print("Please enter a valid option: ");
+			}
+		} while (exit == false);
+	}
+	
 	// Updates fields in existing entries in directory (Person[] arr)
 	public void updateEntry(int entry) {
 		boolean exit = false;
@@ -110,7 +287,7 @@ public class Entry {
 		System.out.println("\nYou selected: \n" + arr[entry].getFullEntry());
 		
 		do {
-			Choices.updateRecord();
+			Choices.updateEntry();
 			try {
 				switch (Integer.parseInt(MainMenu.in.nextLine())) {
 				case 1:
@@ -158,7 +335,7 @@ public class Entry {
 					System.out.println("\nZip code has been updated!");
 					break;
 				case 8:
-					System.out.print("\nEnter new PHONE NUMBER (i.e.8881112020): ");
+					System.out.print("\nEnter new PHONE NUMBER: ");
 					long phoneNumber = Long.parseLong(MainMenu.in.nextLine().trim().replaceAll("[^0-9]", ""));
 					arr[entry].setPhoneNumber(phoneNumber);
 					System.out.println("\nPhone number has been updated!");

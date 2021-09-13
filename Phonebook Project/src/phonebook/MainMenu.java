@@ -17,9 +17,9 @@ public class MainMenu {
 		boolean endProgram = false;
 		boolean exit = false;
 		
-		entries.addEntry("John Doe, 114 Market St, St Louis, MO, 63403, 6366435698");
-		entries.addEntry("John E Doe, 324 Main St, St Charles, MO,63303, 8475390126");
-		entries.addEntry("John Michael West Doe, 574 Pole ave, St. Peters, MO, 63333, 5628592375");
+		entries.addEntry("Sintia Yanes, 114 Market St, St Louis, MO, 63403, 6366435698");
+		entries.addEntry("John Nguyen, 324 Main St, St Charles, MO,63303, 8475390126");
+		entries.addEntry("Jorge A. Ortiz Alvarado, 574 Pole ave, St. Peters, MO, 63333, 5628592375");
 		
 		System.out.println("***** WELCOME TO PHONEBOOK! *****");
 		
@@ -34,6 +34,28 @@ public class MainMenu {
 					System.out.println("Entry added.");
 					break;
 				case 2:
+					// Searches for an existing record
+					if (entries.getNumberOfEntries() != 0) {
+						Choices.searchEntries();
+						do {
+							try {
+								int entryNum = Integer.parseInt(in.nextLine());
+								if (entryNum >= 1 && entryNum <= 6) {
+									entries.searchEntries(entryNum);
+									exit = true;
+								} else {
+									System.out.print("Please enter a valid entry number: ");
+								}
+							} catch (NumberFormatException e) {
+								System.out.print("Please enter a valid entry number: ");
+							}
+						} while (exit == false);
+						exit = false;
+					} else if (entries.getNumberOfEntries() == 0) {
+						System.out.println("No records on file.");
+					}
+					break;
+				case 3:
 					// Views existing record
 					System.out.println("\nCurrent entries are:");
 					entries.getCurrentEntries();
@@ -44,7 +66,7 @@ public class MainMenu {
 						endProgram = true;
 					}
 					break;
-				case 3:
+				case 4:
 					// Updates existing record
 					System.out.println("\nSelect an entry you would like to update:\n");
 					entries.getCurrentEntries();
@@ -68,7 +90,7 @@ public class MainMenu {
 						exit = false;
 					}
 					break;
-				case 4:
+				case 5:
 					// Deletes existing record
 					System.out.println("\nSelect an entry you would like to delete:\n");
 					entries.getCurrentEntries();
@@ -91,7 +113,7 @@ public class MainMenu {
 					}
 					exit = false;
 					break;
-				case 5:
+				case 6:
 					// Exits program
 					System.out.println("\nThank you! Goodbye.");
 					endProgram = true;

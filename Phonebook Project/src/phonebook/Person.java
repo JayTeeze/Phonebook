@@ -51,8 +51,12 @@ public class Person extends Address implements Comparable <Person> {
 		}
 		return fullName;
 	}
+	
+	public long getPhoneNumber() {
+		return phoneNumber;
+	}
 
-	public String getPhoneNumber() {
+	public String getPhoneAsString() {
 		return String.valueOf(phoneNumber).replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1) $2-$3");
 	}
 
@@ -61,7 +65,7 @@ public class Person extends Address implements Comparable <Person> {
 	}
 	
 	public String getFullEntry() {
-		return getFullName() + "\n" + getFullAddress() + "\n" + getPhoneNumber();
+		return getFullName() + "\n" + getFullAddress() + "\n" + getPhoneAsString();
 	}
 
 	@Override
