@@ -9,9 +9,9 @@ public class Person extends Address implements Comparable <Person> {
 	
 	public Person() {};
 	
-	public Person(String firstName, String middleName, String lastName, int number, String street, 
-			String suffix, String city, String state, int zip, long phoneNumber) {
-		super(number, street, suffix, city, state, zip);
+	public Person(String firstName, String middleName, String lastName, String streetAddress,
+			String city, String state, int zip, long phoneNumber) {
+		super(streetAddress, city, state, zip);
 		this.firstName = firstName;
 		this.middleName = middleName;
 		this.lastName = lastName;
@@ -19,35 +19,38 @@ public class Person extends Address implements Comparable <Person> {
 	}
 
 	public String getFirstName() {
+		setFirstName(firstName);
 		return firstName;
 	}
 
 	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+		this.firstName = capitalCase(firstName);
 	}
 
 	public String getMiddleName() {
+		setMiddleName(middleName);
 		return middleName;
 	}
 
 	public void setMiddleName(String middleName) {
-		this.middleName = middleName;
+		this.middleName = capitalCase(middleName);
 	}
 
 	public String getLastName() {
+		setLastName(lastName);
 		return lastName;
 	}
 
 	public void setLastName(String lastName) {
-		this.lastName = lastName;
+		this.lastName = capitalCase(lastName);
 	}
 	
 	public String getFullName() {
 		String fullName;
 		if (middleName == null || middleName == "") {
-			fullName = firstName + " " + lastName;
+			fullName = getFirstName() + " " + getLastName();
 		} else {
-			fullName = firstName + " " + middleName + " " + lastName;
+			fullName = getFirstName() + " " + getMiddleName() + " " + getLastName();
 		}
 		return fullName;
 	}
@@ -66,6 +69,21 @@ public class Person extends Address implements Comparable <Person> {
 	
 	public String getFullEntry() {
 		return getFullName() + "\n" + getFullAddress() + "\n" + getPhoneAsString();
+	}
+	
+	private String capitalCase(String word) {
+		String wordCapitalized = "";
+		
+		if (word.length() > 0) {
+			String[] words = word.trim().split(" ");
+			
+			for (int i = 0; i < words.length; i++) {
+				wordCapitalized += words[i].trim().substring(0, 1).toUpperCase() + words[i].substring(1) + " ";
+			}
+			return wordCapitalized.trim();
+		} else {
+			return word;
+		}
 	}
 
 	@Override

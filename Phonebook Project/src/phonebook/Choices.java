@@ -6,7 +6,7 @@ public class Choices {
 		System.out.println("\nWhat would you like to do today?\n");
 		System.out.println("To add a new entry, enter 1");
 		System.out.println("To search for an existing entry, enter 2");
-		System.out.println("To view an existing entry, enter 3");
+		System.out.println("To view existing entries, enter 3");
 		System.out.println("To update an existing entry, enter 4");
 		System.out.println("To delete an existing entry, enter 5");
 		System.out.println("To exit, enter 6");
@@ -21,6 +21,7 @@ public class Choices {
 		System.out.println("Search by TELEPHONE NUMBER, enter 4");
 		System.out.println("Search by CITY, enter 5");
 		System.out.println("Search by STATE, enter 6");
+		System.out.println("To return to Main Menu, enter 7");
 		System.out.print("Enter choice here: ");
 	}
 	
