@@ -26,9 +26,10 @@ public class Choices {
 	}
 	
 	public static void searchEntriesSubMenu() {
-		System.out.println("To UPDATE an entry, enter 1");
+		System.out.println("\nTo UPDATE an entry, enter 1");
 		System.out.println("To DELETE an entry, enter 2");
-		System.out.println("To go back to Main Menu, enter 3");
+		System.out.println("To search for another entry, enter 3");
+		System.out.println("To go back to Main Menu, enter 4");
 		System.out.print("Enter choice here: ");
 	}
 	

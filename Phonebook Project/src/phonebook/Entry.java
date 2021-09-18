@@ -5,25 +5,45 @@ import java.util.Arrays;
 // Entry class acts as directory, resets at end of program 
 public class Entry {
 	
-	private Person[] arr = new Person[0];
+	private Person[] directory = new Person[0];
 	
 	public Entry() {};
 	
+	// Pre-populates program for interactive purposes
+	public void populate() {
+		Person[] tempArr = new Person[3];
+		
+		Person newPerson = new Person("John", "", "Doe",
+				"114 Market St", "St Louis", "MO", 63403, 6366435698L);
+		tempArr[0] = newPerson;
+		
+		newPerson = new Person("John", "E", "Doe",
+				"324 Main St", "St Charles", "MO", 63303, 8475390126L);
+		tempArr[1] = newPerson;
+		
+		newPerson = new Person("John", "Michael", "West Doe",
+				"574 Pole ave", "St. Peters", "MO", 63333, 5628592375L);
+		tempArr[2] = newPerson;
+		
+		directory = tempArr;
+		Arrays.sort(directory);
+	}
+	
 	// Getter for entries (indexes) in directory (Person[] arr)
 	public void getCurrentEntries() {
-		if (arr.length == 0) {
+		if (directory.length == 0) {
 			System.out.println("No entries on file.\n");
 		} else {
-			Arrays.sort(arr);
-			for (int i = 0; i < arr.length; i++) {
-				System.out.println("Entry #" + (i + 1) + ":\n" + arr[i].getFullEntry() + "\n");
+			Arrays.sort(directory);
+			for (int i = 0; i < directory.length; i++) {
+				System.out.println("Entry #" + (i + 1) + ":\n" + directory[i].getFullEntry() + "\n");
 			}
 		}
 	}
 	
 	// Gets number of entries in directory (Person[] arr)
 	public int getNumberOfEntries() {
-		return arr.length;
+		return directory.length;
 	}
 	
 	// Used to return 1 or 2 to stay in loops or exit loops
@@ -132,13 +152,13 @@ public class Entry {
 					Person newPerson = new Person(firstName, middleName, lastName,
 							streetAddress, city, state, zipCode, phoneNum);
 					
-					// Adds new entry(Person) to directory (Person[] arr)
-					Person[] tempArr = new Person[arr.length + 1];
-					for (int i = 0; i < arr.length; i++) {
-						tempArr[i] = arr[i];
+					// Adds new entry(Person) to directory (Person[] directory)
+					Person[] tempArr = new Person[directory.length + 1];
+					for (int i = 0; i < directory.length; i++) {
+						tempArr[i] = directory[i];
 					}
-					arr = tempArr;
-					arr[arr.length - 1] = newPerson;
+					directory = tempArr;
+					directory[directory.length - 1] = newPerson;
 					
 					System.out.println("\nEntry added!");
 				} else {
@@ -155,155 +175,184 @@ public class Entry {
 	}
 	
 	// Searches for existing entries using user selected search criteria
-	public void searchEntries(int entry) {
+	public void searchEntries() {
 		int[] searchResultChoice = new int[0];
 		int counter = 0;
+		boolean exit = false;
+		Arrays.sort(directory);
 		
-		switch (entry) {
-		case 1:
-			System.out.print("\nEnter FIRST NAME: ");
-			String searchInput = MainMenu.in.nextLine().trim();
-			System.out.println();
-			
-			for (int i = 0; i < arr.length; i++) {
-				// test code
-				String[] firstName = arr[i].getFirstName().split(" ");
-				if (firstName.length > 1) {
-					for (int j = 0; j < firstName.length; j++) {
-						if (searchInput.equalsIgnoreCase(firstName[j])) {
-							System.out.println("Entry #" + (counter + 1) + ":\n" + arr[i].getFullEntry() + "\n");
-							// Getting index number in Person[] arr for any matching results and adding to search results array
-							int[] tempArr = new int[searchResultChoice.length + 1];
-							tempArr[counter] = i;
-							searchResultChoice = tempArr;
-							counter++;
-							break;
+		Choices.searchEntries();
+		do {
+			try {
+				int entry = Integer.parseInt(MainMenu.in.nextLine());
+				if (entry >= 1 && entry <= 6) {
+					
+					switch (entry) {
+					case 1:
+						System.out.print("\nEnter FIRST NAME: ");
+						String searchInput = MainMenu.in.nextLine().trim();
+						String[] searchArr = searchInput.split(" ");
+						int matchesFound = 0;
+						
+						for (int i = 0; i < directory.length; i++) {
+							for (int j = 0; j < searchArr.length; j++) {
+								if (directory[i].getFirstName().toLowerCase().contains(searchArr[j].trim().toLowerCase())) {
+									matchesFound++;
+								}
+								if (matchesFound == searchArr.length) {
+									System.out.println("\nEntry #" + (counter + 1) + ":\n" + directory[i].getFullEntry());
+									// Getting index number in Person[] directory for any matching results and adding to search results array
+									int[] tempArr = new int[searchResultChoice.length + 1];
+									for (int index = 0; index < searchResultChoice.length; index++) {
+										tempArr[index] = searchResultChoice[index];
+									}
+									searchResultChoice = tempArr;
+									searchResultChoice[searchResultChoice.length - 1] = i;
+									counter++;
+								}
+							}
+							matchesFound = 0;
 						}
-					}
-				} else {
-					// Good code vvv added inside if...else 
-					if (searchInput.equalsIgnoreCase(arr[i].getFirstName())) {
-						System.out.println("Entry #" + (counter + 1) + ":\n" + arr[i].getFullEntry() + "\n");
-						// Getting index number in Person[] arr for any matching results and adding to search results array
-						int[] tempArr = new int[searchResultChoice.length + 1];
-						tempArr[counter] = i;
-						searchResultChoice = tempArr;
-						counter++;
-					}
-				}
-			}
-			break;
-		case 2:
-			System.out.print("\nEnter LAST NAME: ");
-			searchInput = MainMenu.in.nextLine().trim();
-			System.out.println();
-			
-			for (int i = 0; i < arr.length; i++) {
-				
-				String[] lastName = arr[i].getLastName().split(" ");
-				if (lastName.length > 1) {
-					for (int j = 0; j < lastName.length; j++) {
-						if (searchInput.equalsIgnoreCase(lastName[j])) {
-							System.out.println("Entry #" + (counter + 1) + ":\n" + arr[i].getFullEntry() + "\n");
-							// Getting index number in Person[] arr for any matching results and adding to search results array
-							int[] tempArr = new int[searchResultChoice.length + 1];
-							tempArr[counter] = i;
-							searchResultChoice = tempArr;
-							counter++;
-							break;
+						break;
+					case 2:
+						System.out.print("\nEnter LAST NAME: ");
+						searchInput = MainMenu.in.nextLine().trim();
+						searchArr = searchInput.split(" ");
+						matchesFound = 0;
+						
+						for (int i = 0; i < directory.length; i++) {
+							for (int j = 0; j < searchArr.length; j++) {
+								if (directory[i].getLastName().toLowerCase().contains(searchArr[j].trim().toLowerCase())) {
+									matchesFound++;
+								}
+								if (matchesFound == searchArr.length) {
+									System.out.println("\nEntry #" + (counter + 1) + ":\n" + directory[i].getFullEntry());
+									// Getting index number in Person[] directory for any matching results and adding to search results array
+									int[] tempArr = new int[searchResultChoice.length + 1];
+									for (int index = 0; index < searchResultChoice.length; index++) {
+										tempArr[index] = searchResultChoice[index];
+									}
+									searchResultChoice = tempArr;
+									searchResultChoice[searchResultChoice.length - 1] = i;
+									counter++;
+								}
+							}
+							matchesFound = 0;
 						}
+						break;
+					case 3:
+						System.out.print("\nEnter FULL NAME: ");
+						searchInput = MainMenu.in.nextLine().trim();
+						searchArr = searchInput.split(" ");
+						matchesFound = 0;
+						
+						for (int i = 0; i < directory.length; i++) {
+							for (int j = 0; j < searchArr.length; j++) {
+								if (directory[i].getFullName().toLowerCase().contains(searchArr[j].trim().toLowerCase())) {
+									matchesFound++;
+								}
+								if (matchesFound == searchArr.length) {
+									System.out.println("\nEntry #" + (counter + 1) + ":\n" + directory[i].getFullEntry());
+									// Getting index number in Person[] directory for any matching results and adding to search results array
+									int[] tempArr = new int[searchResultChoice.length + 1];
+									for (int index = 0; index < searchResultChoice.length; index++) {
+										tempArr[index] = searchResultChoice[index];
+									}
+									searchResultChoice = tempArr;
+									searchResultChoice[searchResultChoice.length - 1] = i;
+									counter++;
+								}
+							}
+							matchesFound = 0;
+						}
+						break;
+					case 4:
+						System.out.print("\nEnter TELEPHONE NUMBER: ");
+						searchInput = MainMenu.in.nextLine().trim().replaceAll("[^0-9]", "");
+						
+						if(searchInput.matches("^\\d+$")) {
+							long phoneNumber = Long.parseLong(searchInput);
+							for (int i = 0; i < directory.length; i++) {
+								if (phoneNumber == directory[i].getPhoneNumber()) {
+									System.out.println("\nEntry #" + (counter + 1) + ":\n" + directory[i].getFullEntry());
+									
+									// Getting index number in Person[] directory for any matching results and adding to search results array
+									int[] tempArr = new int[searchResultChoice.length + 1];
+									for (int index = 0; index < searchResultChoice.length; index++) {
+										tempArr[index] = searchResultChoice[index];
+									}
+									searchResultChoice = tempArr;
+									searchResultChoice[searchResultChoice.length - 1] = i;
+									counter++;
+								}
+							}
+						}
+						break;
+					case 5:
+						System.out.print("\nEnter CITY: ");
+						searchInput = MainMenu.in.nextLine().trim();
+						searchArr = searchInput.split(" ");
+						matchesFound = 0;
+						
+						for (int i = 0; i < directory.length; i++) {
+							for (int j = 0; j < searchArr.length; j++) {
+								if (directory[i].getCity().toLowerCase().contains(searchArr[j].trim().toLowerCase())) {
+									matchesFound++;
+								}
+								if (matchesFound == searchArr.length) {
+									System.out.println("\nEntry #" + (counter + 1) + ":\n" + directory[i].getFullEntry());
+									// Getting index number in Person[] directory for any matching results and adding to search results array
+									int[] tempArr = new int[searchResultChoice.length + 1];
+									for (int index = 0; index < searchResultChoice.length; index++) {
+										tempArr[index] = searchResultChoice[index];
+									}
+									searchResultChoice = tempArr;
+									searchResultChoice[searchResultChoice.length - 1] = i;
+									counter++;
+								}
+							}
+							matchesFound = 0;
+						}
+						break;
+					case 6:
+						System.out.print("\nEnter STATE: ");
+						searchInput = MainMenu.in.nextLine().trim();
+						
+						for (int i = 0; i < directory.length; i++) {
+							if (searchInput.equalsIgnoreCase(directory[i].getState())) {
+								System.out.println("\nEntry #" + (counter + 1) + ":\n" + directory[i].getFullEntry());
+								// Getting index number in Person[] directory for any matching results and adding to search results array
+								int[] tempArr = new int[searchResultChoice.length + 1];
+								for (int index = 0; index < searchResultChoice.length; index++) {
+									tempArr[index] = searchResultChoice[index];
+								}
+								searchResultChoice = tempArr;
+								searchResultChoice[searchResultChoice.length - 1] = i;
+								counter++;
+							}
+						}
+						break;
 					}
+					exit = true;
+				} else if (entry == 7) {
+					exit = true;
 				} else {
-					if (searchInput.equalsIgnoreCase(arr[i].getLastName())) {
-						System.out.println("Entry #" + (counter + 1) + ":\n" + arr[i].getFullEntry() + "\n");
-						// Getting index number in Person[] arr for any matching results and adding to search results array
-						int[] tempArr = new int[searchResultChoice.length + 1];
-						tempArr[counter] = i;
-						searchResultChoice = tempArr;
-						counter++;
-					}
+					System.out.print("\nPlease enter a valid entry number: ");
 				}
+			} catch (NumberFormatException e) {
+				System.out.print("\nPlease enter a valid entry number: ");
 			}
-			break;
-		case 3:
-			System.out.print("\nEnter FULL NAME: ");
-			searchInput = MainMenu.in.nextLine().trim();
-			System.out.println();
-			
-			for (int i = 0; i < arr.length; i++) {
-				if (searchInput.equalsIgnoreCase(arr[i].getFullName())) {
-					System.out.println("Entry #" + (counter + 1) + ":\n" + arr[i].getFullEntry() + "\n");
-					// Getting index number in Person[] arr for any matching results and adding to search results array
-					int[] tempArr = new int[searchResultChoice.length + 1];
-					tempArr[counter] = i;
-					searchResultChoice = tempArr;
-					counter++;
-				}
-			}
-			break;
-		case 4:
-			System.out.print("\nEnter TELEPHONE NUMBER: ");
-			searchInput = MainMenu.in.nextLine().trim().replaceAll("[^0-9]", "");
-			System.out.println();
-			
-			if(searchInput.matches("\\d")) {
-				long phoneNumber = Long.parseLong(searchInput);
-				
-				for (int i = 0; i < arr.length; i++) {
-					if (phoneNumber == arr[i].getPhoneNumber()) {
-						System.out.println("Entry #" + (counter + 1) + ":\n" + arr[i].getFullEntry() + "\n");
-						// Getting index number in Person[] arr for any matching results and adding to search results array
-						int[] tempArr = new int[searchResultChoice.length + 1];
-						tempArr[counter] = i;
-						searchResultChoice = tempArr;
-						counter++;
-					}
-				}
-			}
-			break;
-		case 5:
-			System.out.print("\nEnter CITY: ");
-			searchInput = MainMenu.in.nextLine().trim();
-			System.out.println();
-			
-			for (int i = 0; i < arr.length; i++) {
-				if (searchInput.equalsIgnoreCase(arr[i].getCity())) {
-					System.out.println("Entry #" + (counter + 1) + ":\n" + arr[i].getFullEntry() + "\n");
-					// Getting index number in Person[] arr for any matching results and adding to search results array
-					int[] tempArr = new int[searchResultChoice.length + 1];
-					tempArr[counter] = i;
-					searchResultChoice = tempArr;
-					counter++;
-				}
-			}
-			break;
-		case 6:
-			System.out.print("\nEnter STATE: ");
-			searchInput = MainMenu.in.nextLine().trim();
-			System.out.println();
-			
-			for (int i = 0; i < arr.length; i++) {
-				if (searchInput.equalsIgnoreCase(arr[i].getState())) {
-					System.out.println("Entry #" + (counter + 1) + ":\n" + arr[i].getFullEntry() + "\n");
-					// Getting index number in Person[] arr for any matching results and adding to search results array
-					int[] tempArr = new int[searchResultChoice.length + 1];
-					tempArr[counter] = i;
-					searchResultChoice = tempArr;
-					counter++;
-				}
-			}
-			break;
-		}
+		} while (exit == false);
+		
 		// If results come back, execute code below
 		if (counter > 0) {
 			subSearchEntries(searchResultChoice, counter);
 		} else {
 			System.out.println("No entries matched criteria.");
 		}
-		
 	}
 	
-	// Sub-method for searchEntries() that when together hold index of Person in Person[] arr
+	// Sub-method for searchEntries() that when together hold index of Person in Person[] directory
 	// Will either update an entry, delete an entry or return to Main Menu
 	private void subSearchEntries(int[] searchResultChoice, int counter) {
 		boolean exit = false;
@@ -311,7 +360,7 @@ public class Entry {
 		do {
 			try {
 				int choice = Integer.parseInt(MainMenu.in.nextLine());
-				if (choice >= 1 && choice <= 3) {
+				if (choice >= 1 && choice <= 4) {
 					switch (choice) {
 					case 1:
 					// Updates a record from search results and prompts user to select entry to update
@@ -321,13 +370,13 @@ public class Entry {
 								choice = Integer.parseInt(MainMenu.in.nextLine());
 								if (choice > 0 && choice <= counter) {
 									// Passes index from search result entry to updateEntry()
-									updateEntry(searchResultChoice[counter - 1]);
+									updateEntry(searchResultChoice[choice - 1]);
 									exit = true;
 								} else {
-									System.out.print("Please enter a valid option: ");
+									System.out.print("\nPlease enter a valid option: ");
 								}
 							} catch (NumberFormatException e) {
-								System.out.print("Please enter a valid option: ");
+								System.out.print("\nPlease enter a valid option: ");
 							}
 						} while (exit == false);
 						exit = false;
@@ -340,37 +389,39 @@ public class Entry {
 								choice = Integer.parseInt(MainMenu.in.nextLine());
 								if (choice > 0 && choice <= counter) {
 									// Passes index from search result entry to deleteEntry()
-									deleteEntry(searchResultChoice[counter - 1]);
+									deleteEntry(searchResultChoice[choice - 1]);
 									exit = true;
 								} else {
-									System.out.print("Please enter a valid option: ");
+									System.out.print("\nPlease enter a valid option: ");
 								}
 							} catch (NumberFormatException e) {
-								System.out.print("Please enter a valid option: ");
+								System.out.print("\nPlease enter a valid option: ");
 							}
 						} while (exit == false);
 						exit = false;
 						break;
-					// Ends loop and returns user to Main Menu
+					// Allows user to search another entry after finishing a search query
 					case 3:
+						searchEntries();
 						break;
-					default:
-						System.out.println("Invalid input. Redirecting to Main Menu");
+					// Ends loop and returns user to Main Menu
+					case 4:
+						break;
 					}
 					exit = true;
 				} else {
-					System.out.print("Please enter a valid option: ");
+					System.out.print("\nPlease enter a valid option: ");
 				}
 			} catch (NumberFormatException e) {
-				System.out.print("Please enter a valid option: ");
+				System.out.print("\nPlease enter a valid option: ");
 			}
 		} while (exit == false);
 	}
 	
-	// Updates fields in existing entries in directory (Person[] arr)
+	// Updates fields in existing entries in directory Person[] directory
 	public void updateEntry(int entry) {
 		boolean exit = false;
-		System.out.println("\nEntry selected: \n" + arr[entry].getFullEntry());
+		System.out.println("\nEntry selected: \n" + directory[entry].getFullEntry());
 		
 		do {
 			Choices.updateEntry();
@@ -378,48 +429,49 @@ public class Entry {
 				switch (Integer.parseInt(MainMenu.in.nextLine())) {
 				case 1:
 					System.out.print("\nEnter new FIRST NAME: ");
-					arr[entry].setFirstName(MainMenu.in.nextLine().trim());
+					directory[entry].setFirstName(MainMenu.in.nextLine().trim());
 					System.out.println("\nFirst name has been updated!\n");
 					break;
 				case 2:
 					System.out.print("\nEnter new MIDDLE NAME: ");
-					arr[entry].setMiddleName(MainMenu.in.nextLine().trim());
+					directory[entry].setMiddleName(MainMenu.in.nextLine().trim());
 					System.out.println("\nMiddle name has been updated!\n");
 					break;
 				case 3:
 					System.out.print("\nEnter new LAST NAME: ");
-					arr[entry].setLastName(MainMenu.in.nextLine().trim());
+					directory[entry].setLastName(MainMenu.in.nextLine().trim());
 					System.out.println("\nLast name has been updated!\n");
 					break;
 				case 4:
 					System.out.println("\nEnter new STREET ADDRESS (i.e. 123 Main St): ");
-					arr[entry].setStreetAddress(MainMenu.in.nextLine().trim());
+					directory[entry].setStreetAddress(MainMenu.in.nextLine().trim());
 					System.out.println("\nStreet Address has been updated!\n");
 					break;
 				case 5:
 					System.out.print("\nEnter new CITY: ");
-					arr[entry].setCity(MainMenu.in.nextLine().trim());
+					directory[entry].setCity(MainMenu.in.nextLine().trim());
 					System.out.println("\nCity has been updated!\n");
 					break;
 				case 6:
 					System.out.print("\nEnter new STATE: ");
-					arr[entry].setState(MainMenu.in.nextLine().trim());
+					directory[entry].setState(MainMenu.in.nextLine().trim());
 					System.out.println("\nState has been updated!\n");
 					break;
 				case 7:
 					System.out.print("\nEnter new ZIP CODE: ");
-					arr[entry].setZip(Integer.parseInt(MainMenu.in.nextLine().trim()));
+					directory[entry].setZip(Integer.parseInt(MainMenu.in.nextLine().trim()));
 					System.out.println("\nZip code has been updated!\n");
 					break;
 				case 8:
 					System.out.print("\nEnter new PHONE NUMBER: ");
 					long phoneNumber = Long.parseLong(MainMenu.in.nextLine().replaceAll("[^0-9]", ""));
-					arr[entry].setPhoneNumber(phoneNumber);
+					directory[entry].setPhoneNumber(phoneNumber);
 					System.out.println("\nPhone number has been updated!\n");
 					break;
 				default:
 					System.out.print("\nInvalid option. Try again: ");
 				}
+				Arrays.sort(directory);
 				System.out.println("Would you like to update another field?\n");
 				Choices.yesOrNo();
 				if (chooseOption() == 2) {
@@ -433,20 +485,21 @@ public class Entry {
 	
 	// Deletes an entry selected by user
 	public void deleteEntry(int entry) {
-		System.out.println("\nEntry selected: \n" + arr[entry].getFullEntry());
+		System.out.println("\nEntry selected: \n" + directory[entry].getFullEntry());
 		System.out.println("\nAre you sure you want to delete this entry?\n");
 		
 		Choices.yesOrNo();
 		if (chooseOption() == 1) {
-			arr[entry].setFirstName("");
-			Arrays.sort(arr);
+			// Deletes first name and sends to first spot in array after array sort
+			directory[entry].setFirstName("");
+			Arrays.sort(directory);
 			// After sort, entry gets sent to front of array and gets overwritten below
-			Person[] tempArr = new Person[arr.length - 1];
+			Person[] tempArr = new Person[directory.length - 1];
 			
-			for (int i = 1; i < arr.length; i++) {
-				tempArr[i - 1] = arr[i];
+			for (int i = 1; i < directory.length; i++) {
+				tempArr[i - 1] = directory[i];
 			}
-			arr = tempArr;
+			directory = tempArr;
 			
 			System.out.println("\nEntry deleted!");
 		}
